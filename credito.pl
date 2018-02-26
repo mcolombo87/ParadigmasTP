@@ -31,11 +31,11 @@
 
 
 %%% Base de conocimiento.
-ingresos(cat5).
-ingresos(cat4).
-ingresos(cat3).
-ingresos(cat2).
-ingresos(cat1).
+ingresos(categoria5).
+ingresos(categoria4).
+ingresos(categoria3).
+ingresos(categoria2).
+ingresos(categoria1).
 categoria_credi(excelente).
 categoria_credi(bueno).
 categoria_credi(regular).
@@ -60,20 +60,85 @@ hijos(no).
 %% 	Antonio	si	    si	        cat2	a	    alto
 %casado(juan,no).
 %hijos(juan,no).
+solicitante(marcelo,estado_civil(casado),hijos(no),ingresos(categoria1),categoria_credi(regular),edad(media2)).
 solicitante(juan,estado_civil(soltero),hijos(no),ingresos(cat5),categoria_credi(bueno),edad(baja)).
-solicitante(marcelo,estado_civil(casado),hijos(no),ingresos(cat1),categoria_credi(regular),edad(media2)).
 solicitante(silvia,estado_civil(soltero),hijos(si),ingresos(cat3),categoria_credi(excelente),edad(media1)).
-solicitante(leo,estado_civil(si),hijos(si),ingresos(cat2),categoria_credi(excelente),edad(medio3)).
-solicitante(antonio,estado_civil(si),hijos(si),ingresos(cat2),categoria_credi(excelente),edad(alto)).
+solicitante(leo,estado_civil(casado),hijos(si),ingresos(cat2),categoria_credi(excelente),edad(medio3)).
+solicitante(antonio,estado_civil(casado),hijos(si),ingresos(cat2),categoria_credi(excelente),edad(alto)).
 
-apto_para_credito(X,k5) :- 
-    solicitante(X,estado_civil(soltero),hijos(no),ingresos(cat5),categoria_credi(bueno),edad(baja)).
-apto_para_credito(X,k10).
-apto_para_credito(X,k10x).
-apto_para_credito(X,k50x).
-apto_para_credito(X,kxx).
-
-mirando(test,b).
-mirando(test2,d).
-probando(X) :- 
-    mirando(X,Y),member(Y,[a,b,c]).
+%%CREDITOS
+%%% K5
+apto_para_credito(X,k5) :- %%Solteros o Casados SIN hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado,soltero]),
+    member(HIJO,[no]),
+    member(INGRESO,[cat2,cat3,cat4,cat5]),
+    member(CATCRED,[excelente,bueno,regular]),
+    member(CATEDAD,[baja,media1,media2,media3,alta]).
+apto_para_credito(X,k5) :- %%Casados con hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado]),
+    member(HIJO,[si]),
+    member(INGRESO,[categoria1,cat1,cat2,cat3,cat4,cat5]),
+    member(CATCRED,[excelente,bueno,regular]),
+    member(CATEDAD,[baja,media1,media2,media3,alta]).
+%%% k10
+apto_para_credito(X,k10) :-  %%Solteros o Casados SIN hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado,soltero]),
+    member(HIJO,[no]),
+    member(INGRESO,[cat2,cat3,cat4,cat5]),
+    member(CATCRED,[excelente,bueno,regular]),
+    member(CATEDAD,[baja,media1,media2,media3,alta]).
+apto_para_credito(X,k10) :-  %%Casados con hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado]),
+    member(HIJO,[si]),
+    member(INGRESO,[cat3,cat4,cat5]),
+    member(CATCRED,[excelente,bueno,regular]),
+    member(CATEDAD,[baja,media1,media2,media3,alta]).
+%%% k10x
+apto_para_credito(X,k10x) :-  %%Solteros o Casados SIN hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado,soltero]),
+    member(HIJO,[no]),
+    member(INGRESO,[cat2,cat3,cat4,cat5]),
+    member(CATCRED,[excelente,bueno]),
+    member(CATEDAD,[media1,media2,media3]).
+apto_para_credito(X,k10x) :-  %%Casados con hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado]),
+    member(HIJO,[si]),
+    member(INGRESO,[cat4,cat5]),
+    member(CATCRED,[excelente,bueno]),
+    member(CATEDAD,[media1,media2,media3]).
+%%% k50x
+apto_para_credito(X,k50x) :-  %%Solteros o Casados SIN hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado,soltero]),
+    member(HIJO,[no]),
+    member(INGRESO,[cat3,cat4,cat5]),
+    member(CATCRED,[excelente]),
+    member(CATEDAD,[media1,media2]).
+apto_para_credito(X,k50x) :-  %%Casados con hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado]),
+    member(HIJO,[si]),
+    member(INGRESO,[cat5]),
+    member(CATCRED,[excelente]),
+    member(CATEDAD,[media1,media2]).
+%%% kxx
+apto_para_credito(X,kxx) :-  %%Solteros o Casados SIN hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado,soltero]),
+    member(HIJO,[no]),
+    member(INGRESO,[cat5]),
+    member(CATCRED,[excelente]),
+    member(CATEDAD,[media1,media2]).
+apto_para_credito(X,kxx) :-  %%Casados con hijos.
+    solicitante(X,estado_civil(ESTCIVIL),hijos(HIJO),ingresos(INGRESO),categoria_credi(CATCRED),edad(CATEDAD)),
+    member(ESTCIVIL,[casado]),
+    not member(HIJO,[si]), %% (caso especial ya que no se otorga directamente si tiene hijo)
+    member(INGRESO,[cat5]),
+    member(CATCRED,[excelente]),
+    member(CATEDAD,[media1,media2]).
